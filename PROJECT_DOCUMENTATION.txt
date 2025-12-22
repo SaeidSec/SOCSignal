@@ -1,0 +1,360 @@
+# SOCSignals Blog - Complete Technical Documentation
+
+## Project Overview
+
+**Project Name:** SOCSignals Blog  
+**Version:** 1.0.0  
+**Description:** A minimal, clean cybersecurity blog with backend management capabilities  
+**License:** MIT  
+**Type:** Full-stack web application
+
+---
+
+## Technology Stack
+
+### Backend Technologies
+
+#### Core Framework
+- **Node.js** - JavaScript runtime environment
+- **Express.js v4.18.2** - Web application framework
+  - Handles routing, middleware, and HTTP requests
+  - Serves static files and API endpoints
+
+#### Database
+- **SQLite v5.1.7** - Embedded relational database
+  - File-based database (`database.db`)
+  - No separate server required
+  - Tables: `users`, `posts`
+  - Alternative support for MySQL2 v3.16.0 (configured but not active)
+
+#### Authentication & Security
+- **JSON Web Tokens (JWT) v9.0.2** - Token-based authentication
+  - Secures admin routes
+  - 24-hour token expiration
+- **bcrypt v5.1.1** - Password hashing
+  - 10 salt rounds for secure password storage
+
+#### File Upload
+- **Multer v1.4.5-lts.1** - Multipart/form-data handling
+  - Handles image uploads
+  - 50MB file size limit
+  - Stores files in `public/uploads/`
+
+#### Additional Backend Libraries
+- **CORS v2.8.5** - Cross-Origin Resource Sharing
+- **dotenv v16.3.1** - Environment variable management
+- **Firebase Admin v13.6.0** - Firebase integration (available but not actively used)
+
+---
+
+### Frontend Technologies
+
+#### Core Languages
+- **HTML5** - Structure and markup
+- **CSS3** - Styling and layout
+- **Vanilla JavaScript (ES6+)** - Client-side logic
+
+#### Fonts & Typography
+- **Google Fonts**
+  - Inter (weights: 300, 400, 500, 600, 700)
+  - JetBrains Mono (weights: 400, 500, 600)
+
+#### Rich Text Editor
+- **Editor.js v2.29.0** - Block-style WYSIWYG editor
+  - Modern, API-driven content editor
+  - Stores content as JSON
+
+#### Editor.js Plugins
+- **@editorjs/header v2.8.1** - Heading blocks (H2, H3, H4)
+- **@editorjs/list v1.9.0** - Ordered and unordered lists
+- **@editorjs/image v2.9.0** - Image embedding with upload
+- **@editorjs/quote v2.6.0** - Quote blocks
+- **@editorjs/code v2.9.0** - Code blocks
+- **@editorjs/inline-code v1.5.0** - Inline code formatting
+- **@editorjs/marker v1.4.0** - Text highlighting
+- **@editorjs/delimiter v1.4.0** - Visual separators
+- **editorjs-undo** - Undo/redo functionality
+
+#### Additional Frontend Libraries
+- **Marked.js** - Markdown to HTML conversion (for legacy content)
+- **Highlight.js v11.9.0** - Syntax highlighting for code blocks
+  - Theme: Atom One Dark
+
+---
+
+## Project Architecture
+
+### Directory Structure
+
+```
+SOC-main/
+├── config/                    # Database configuration
+│   ├── database.js           # Database selector
+│   ├── database.sqlite.js    # SQLite implementation (active)
+│   ├── database.mysql.js     # MySQL implementation
+│   └── firebase.js           # Firebase configuration
+├── middleware/               # Express middleware
+│   └── auth.js              # JWT authentication middleware
+├── routes/                   # API route handlers
+│   ├── auth.js              # Login endpoint
+│   ├── posts.js             # Blog posts CRUD operations
+│   └── upload.js            # Image upload handling
+├── public/                   # Static files (served by Express)
+│   ├── index.html           # Homepage
+│   ├── post.html            # Single post view
+│   ├── about.html           # About page
+│   ├── css/
+│   │   └── style.css        # Public site styles
+│   ├── js/
+│   │   └── main.js          # Public site JavaScript
+│   ├── admin/               # Admin panel
+│   │   ├── login.html       # Admin login
+│   │   ├── dashboard.html   # Admin dashboard
+│   │   ├── css/
+│   │   │   └── admin.css    # Admin styles
+│   │   └── js/
+│   │       └── admin.js     # Admin JavaScript
+│   └── uploads/             # User-uploaded images
+├── server.js                # Express server entry point
+├── package.json             # Node.js dependencies
+├── .env                     # Environment variables
+└── database.db              # SQLite database file
+```
+
+---
+
+## Database Schema
+
+### Users Table
+```sql
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+)
+```
+
+**Default Admin Account:**
+- Username: `admin`
+- Password: `admin123` (hashed with bcrypt)
+
+### Posts Table
+```sql
+CREATE TABLE posts (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  title TEXT NOT NULL,
+  slug TEXT UNIQUE NOT NULL,
+  content TEXT NOT NULL,              -- JSON from Editor.js
+  excerpt TEXT,
+  cover_image TEXT,
+  meta_description TEXT,
+  meta_keywords TEXT,
+  tags TEXT,
+  author TEXT DEFAULT 'Admin',
+  reading_time INTEGER DEFAULT 5,
+  category TEXT DEFAULT 'Uncategorized',
+  published INTEGER DEFAULT 0,        -- 0 = draft, 1 = published
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+)
+```
+
+---
+
+## API Endpoints
+
+### Public Endpoints
+- `GET /` - Homepage
+- `GET /api/posts` - Get all published posts
+- `GET /api/posts/:slug` - Get single post by slug
+- `GET /api/categories` - Get list of categories
+
+### Authentication
+- `POST /api/login` - Admin login
+  - Body: `{ username, password }`
+  - Returns: JWT token
+
+### Protected Endpoints (Require JWT)
+- `GET /api/admin/posts` - Get all posts (including drafts)
+- `POST /api/posts` - Create new post
+- `PUT /api/posts/:id` - Update post
+- `DELETE /api/posts/:id` - Delete post
+- `POST /api/upload` - Upload image
+- `DELETE /api/upload/:filename` - Delete uploaded image
+
+---
+
+## Features
+
+### Public Blog
+- ✅ Responsive homepage with article grid
+- ✅ Individual post pages
+- ✅ Category filtering
+- ✅ SEO-optimized meta tags
+- ✅ Cover image support
+- ✅ Reading time estimation
+- ✅ Modern, dark-themed UI
+
+### Admin Dashboard
+- ✅ Secure JWT authentication
+- ✅ Rich text editor (Editor.js)
+- ✅ Image upload with preview
+- ✅ Draft/publish toggle
+- ✅ SEO fields (meta description, keywords)
+- ✅ Category management
+- ✅ Tags support
+- ✅ Author attribution
+- ✅ CRUD operations for posts
+
+---
+
+## Environment Variables
+
+Located in `.env` file:
+
+```env
+JWT_SECRET=your-super-secret-jwt-key-here
+PORT=3001
+
+# MySQL Configuration (not currently active)
+DB_HOST=localhost
+DB_USER=bear
+DB_PASSWORD=saeid12@
+DB_NAME=blog_db
+```
+
+---
+
+## Running the Application
+
+### Installation
+```bash
+npm install
+```
+
+### Development
+```bash
+npm run dev
+# or
+npm start
+```
+
+Server runs on: `http://localhost:3001`  
+Admin panel: `http://localhost:3001/admin/login.html`
+
+---
+
+## Security Features
+
+1. **Password Hashing** - bcrypt with 10 salt rounds
+2. **JWT Authentication** - Token-based auth for admin routes
+3. **CORS Protection** - Configured CORS middleware
+4. **File Upload Validation** - Only image files allowed, 50MB limit
+5. **SQL Injection Protection** - Parameterized queries
+6. **XSS Protection** - HTML escaping in frontend
+
+---
+
+## Design & UI
+
+### Color Scheme
+- Dark theme with cybersecurity aesthetic
+- Primary colors: Blues and purples
+- Accent colors for CTAs and highlights
+
+### Typography
+- **Headings:** Inter (sans-serif)
+- **Code:** JetBrains Mono (monospace)
+
+### UI Components
+- Gradient backgrounds
+- Glassmorphism effects
+- Smooth animations and transitions
+- Responsive grid layouts
+- Modern card-based design
+
+---
+
+## Content Management
+
+### Article Creation Workflow
+1. Login to admin dashboard
+2. Click "New Article"
+3. Fill in title, author, category
+4. Upload cover image (optional)
+5. Write content using Editor.js
+6. Add SEO metadata
+7. Toggle publish status
+8. Save article
+
+### Content Storage
+- Articles stored as JSON (Editor.js format)
+- Supports rich formatting, images, code blocks, quotes
+- Backward compatible with Markdown (legacy)
+
+---
+
+## Browser Compatibility
+
+- Chrome/Edge (latest)
+- Firefox (latest)
+- Safari (latest)
+- Mobile browsers (iOS Safari, Chrome Mobile)
+
+---
+
+## Performance Optimizations
+
+- Static file serving via Express
+- Efficient database queries
+- Lazy loading for images
+- Minimal external dependencies
+- CDN-hosted libraries
+
+---
+
+## Future Enhancements (Potential)
+
+- Comment system
+- Search functionality
+- RSS feed
+- Social media sharing
+- Analytics integration
+- Multi-user support
+- Role-based access control
+- Email notifications
+
+---
+
+## Support & Maintenance
+
+### Database Backup
+SQLite database file: `database.db`  
+Backup regularly by copying this file.
+
+### Logs
+Server logs output to console.  
+Monitor for errors and API responses.
+
+### Updates
+Keep dependencies updated:
+```bash
+npm update
+```
+
+---
+
+## Credits
+
+**Built with:**
+- Express.js framework
+- Editor.js content editor
+- SQLite database
+- Modern web standards
+
+**Designed for:** SOC analysts, security researchers, and cybersecurity professionals
+
+---
+
+*Last Updated: December 22, 2025*

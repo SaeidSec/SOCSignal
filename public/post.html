@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Blog post">
+    <title id="post-title">Post | SOCSignals</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="brand-icon">🛡️</span>
+                <span class="brand-text">SOC<span class="brand-accent">Signals</span></span>
+            </div>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/#about" class="nav-link">About</a>
+                <a href="/#posts" class="nav-link">Articles</a>
+                <a href="/admin/login.html" class="nav-link nav-admin">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Post Content -->
+    <div class="post-page">
+        <div class="container">
+            <article id="post-content" class="post-content">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>Loading article...</p>
+                </div>
+            </article>
+
+            <div class="post-navigation">
+                <a href="/" class="back-link">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M8 3L3 8L8 13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                    <span>Back to all articles</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="brand-icon">🛡️</span>
+                    <span class="brand-text">SOC<span class="brand-accent">Signals</span></span>
+                </div>
+                <div class="footer-text">
+                    <p>&copy; 2024 SOCSignals. All rights reserved.</p>
+                    <p class="footer-tagline">Securing the digital frontier, one threat at a time.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

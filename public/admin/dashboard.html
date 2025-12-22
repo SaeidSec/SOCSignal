@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | SOCSignals</title>
+    <link rel="stylesheet" href="/admin/css/admin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <h1>🛡️ Blog Dashboard</h1>
+            <div class="header-actions">
+                <a href="/" class="btn btn-secondary btn-small">View Blog</a>
+                <button id="logout-btn" class="btn btn-danger btn-small">Logout</button>
+            </div>
+        </header>
+
+        <main class="dashboard-main">
+            <!-- Posts List View -->
+            <div id="posts-view" class="view">
+                <div class="view-header">
+                    <h2>All Articles</h2>
+                    <button id="new-post-btn" class="btn btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                        <span>New Article</span>
+                    </button>
+                </div>
+
+                <div id="posts-list" class="posts-list">
+                    <p class="loading">Loading articles...</p>
+                </div>
+            </div>
+
+            <!-- Post Editor View -->
+            <div id="editor-view" class="view" style="display: none;">
+                <div class="view-header">
+                    <h2 id="editor-title">New Article</h2>
+                    <button id="cancel-edit-btn" class="btn btn-secondary">Cancel</button>
+                </div>
+
+                <form id="post-form">
+                    <input type="hidden" id="post-id">
+
+                    <!-- Title -->
+                    <div class="form-group">
+                        <label for="post-title-input">📝 Title *</label>
+                        <input type="text" id="post-title-input" required placeholder="Enter article title">
+                    </div>
+
+                    <!-- Author -->
+                    <div class="form-group">
+                        <label for="post-author-input">👤 Author</label>
+                        <input type="text" id="post-author-input" placeholder="Your name" value="Admin">
+                    </div>
+
+                    <!-- Cover Image -->
+                    <div class="form-group">
+                        <label for="post-cover-input">🖼️ Cover Image URL</label>
+                        <div class="image-upload-group">
+                            <input type="text" id="post-cover-input"
+                                placeholder="https://example.com/image.jpg or /uploads/image.jpg">
+                            <button type="button" id="upload-cover-btn" class="btn btn-secondary btn-small">Upload
+                                Image</button>
+                            <input type="file" id="cover-file-input" accept="image/*" style="display: none;">
+                        </div>
+                        <div id="cover-preview" class="image-preview" style="display: none;">
+                            <img id="cover-preview-img" src="" alt="Cover preview">
+                            <button type="button" id="remove-cover-btn" class="btn btn-danger btn-small">Remove</button>
+                        </div>
+                    </div>
+
+                    <!-- Excerpt -->
+                    <div class="form-group">
+                        <label for="post-excerpt-input">📄 Excerpt</label>
+                        <textarea id="post-excerpt-input" rows="2"
+                            placeholder="Short description (shown on homepage and in SEO)"></textarea>
+                    </div>
+
+                    <!-- SEO Meta Description -->
+                    <div class="form-group">
+                        <label for="post-meta-desc-input">🔍 SEO Meta Description</label>
+                        <textarea id="post-meta-desc-input" rows="2"
+                            placeholder="SEO description (if empty, uses excerpt)"></textarea>
+                        <small class="form-hint">Recommended: 150-160 characters</small>
+                    </div>
+
+                    <!-- SEO Keywords -->
+                    <div class="form-group">
+                        <label for="post-meta-keywords-input">🏷️ SEO Keywords</label>
+                        <input type="text" id="post-meta-keywords-input"
+                            placeholder="cybersecurity, threat hunting, SOC, SIEM">
+                        <small class="form-hint">Comma-separated keywords for SEO</small>
+                    </div>
+
+                    <!-- Tags -->
+                    <div class="form-group">
+                        <label for="post-tags-input">🏷️ Tags</label>
+                        <input type="text" id="post-tags-input"
+                            placeholder="Security, Threat Hunting, Malware Analysis">
+                        <small class="form-hint">Comma-separated tags for categorization</small>
+                    </div>
+
+                    <!-- Category -->
+                    <div class="form-group">
+                        <label for="post-category-input">📂 Category</label>
+                        <select id="post-category-input" required>
+                            <option value="Uncategorized">Uncategorized</option>
+                            <option value="Threat Hunting">Threat Hunting</option>
+                            <option value="Incident Response">Incident Response</option>
+                            <option value="Malware Analysis">Malware Analysis</option>
+                            <option value="Cloud Security">Cloud Security</option>
+                            <option value="Network Security">Network Security</option>
+                            <option value="VAPT">VAPT</option>
+                            <option value="General">General</option>
+                        </select>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="form-group">
+                        <label for="editorjs">✍️ Content *</label>
+                        <div id="editorjs" class="editor-container"></div>
+                        <small class="form-hint">Type / to open the menu. Select text to format.</small>
+                    </div>
+
+                    <!-- Published Checkbox -->
+                    <div class="form-group checkbox-group">
+                        <label>
+                            <input type="checkbox" id="post-published-input" checked>
+                            <span>✅ Published (visible to public)</span>
+                        </label>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M13 3L6 10L3 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                            <span>Save Article</span>
+                        </button>
+                        <button type="button" id="preview-btn" class="btn btn-secondary">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M1 8C1 8 3.5 3 8 3C12.5 3 15 8 15 8C15 8 12.5 13 8 13C3.5 13 1 8 1 8Z"
+                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5" />
+                            </svg>
+                            <span>Preview</span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Markdown Preview -->
+                <div id="preview-container" style="display: none;">
+                    <h3 style="margin-bottom: 20px; color: #3b82f6;">📖 Preview</h3>
+                    <div id="preview-content" class="preview-content"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Editor.js Core -->
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@2.29.0"></script>
+
+    <!-- Editor.js Plugins -->
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/header@2.8.1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/list@1.9.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/image@2.9.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/quote@2.6.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/code@2.9.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/inline-code@1.5.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/marker@1.4.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/delimiter@1.4.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/editorjs-undo"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="/admin/js/admin.js"></script>
+</body>
+
+</html>
