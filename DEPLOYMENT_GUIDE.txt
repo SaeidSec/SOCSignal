@@ -1,0 +1,67 @@
+========================================================================
+DEPLOYMENT GUIDE: NODE.JS BLOG ON RENDER.COM WITH AIVEN.IO MYSQL
+========================================================================
+
+Follow these steps to host your blog for free with a professional panel.
+
+------------------------------------------------------------------------
+STEP 1: SETUP FREE MYSQL ON AIVEN.IO
+------------------------------------------------------------------------
+1. Go to https://aiven.io and sign up for a free account.
+2. Click "Create Service".
+3. Select "MySQL".
+4. Choose the "Free Plan" (select a region near you).
+5. Give your service a name (e.g., "blog-db") and click "Create Service".
+6. Once the service status is "Running", you will see the "Connection Information" panel.
+7. Locate the following values - you will need them for Step 3:
+   - Host
+   - Port
+   - User (usually 'avnadmin')
+   - Password
+   - Database Name (usually 'defaultdb')
+
+------------------------------------------------------------------------
+STEP 2: PREPARE YOUR CODE
+------------------------------------------------------------------------
+1. Since you already pushed your code to GitHub (SOCSignal), make sure your code is updated to support MySQL.
+2. In your `config/database.js`, ensure it is pointing to MySQL instead of SQLite if you want to use Aiven.
+   (Your project already has `config/database.mysql.js` which is perfect for this).
+
+------------------------------------------------------------------------
+STEP 3: DEPLOY ON RENDER.COM
+------------------------------------------------------------------------
+1. Go to https://render.com and sign up with your GitHub account.
+2. Click the "New +" button and select "Web Service".
+3. Connect your GitHub repository: "SaeidSec/SOCSignal".
+4. Set the following Build and Run settings:
+   - Environment: Node
+   - Build Command: npm install
+   - Start Command: npm start
+5. Click on "Advanced" and then "Add Environment Variable".
+6. Add the following variables (use the values from Step 1):
+   - DB_HOST: (Your Aiven Host)
+   - DB_PORT: (Your Aiven Port)
+   - DB_USER: (Your Aiven User)
+   - DB_PASSWORD: (Your Aiven Password)
+   - DB_NAME: (Your Aiven Database Name)
+   - NODE_ENV: production
+
+7. Click "Deploy Web Service".
+
+------------------------------------------------------------------------
+STEP 4: VERIFICATION
+------------------------------------------------------------------------
+1. Render will start building your application. You can watch the logs in the Render dashboard.
+2. Once the logs say "MySQL database initialized successfully" and "Server running on port ...", your site is live!
+3. Render will provide a URL like: https://socsignal.onrender.com
+
+------------------------------------------------------------------------
+IMPORTANT NOTES:
+------------------------------------------------------------------------
+- FREE TIER SLEEP: Render's free tier "sleeps" after 15 minutes of no activity. When you visit the site again, it may take 30-60 seconds to wake up.
+- SSL/HTTPS: Render provides free SSL automatically.
+- NO CREDIT CARD: Both Aiven (Free Plan) and Render (Free Tier) do not require a credit card for these basic services.
+
+========================================================================
+GUIDE END
+========================================================================
