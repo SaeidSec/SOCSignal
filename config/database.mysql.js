@@ -2,9 +2,9 @@ const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 
 // Create MySQL connection pool
-const pool = mysql.createPool({
+const dbConfig = {
   host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 3306,
+  port: parseInt(process.env.DB_PORT) || 3306,
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME || 'blog_db',
@@ -12,7 +12,12 @@ const pool = mysql.createPool({
   connectionLimit: 10,
   queueLimit: 0,
   ssl: process.env.DB_HOST ? { rejectUnauthorized: false } : null
-});
+};
+
+console.log(`Connecting to database at ${dbConfig.host}:${dbConfig.port}...`);
+if (dbConfig.ssl) console.log('SSL connection enabled');
+
+const pool = mysql.createPool(dbConfig);
 
 // Get a promise-based connection from the pool
 const db = pool.promise();
