@@ -74,7 +74,7 @@ const initDatabase = async () => {
           }
 
           // Create default admin user if not exists
-          bcrypt.hash('admin123', 10, (err, hash) => {
+          bcrypt.hash("={de7R*YJ'<21#jeu*a6", 10, (err, hash) => {
             if (err) {
               console.error('Error hashing default password:', err);
               return reject(err);
@@ -82,7 +82,7 @@ const initDatabase = async () => {
 
             db.run(`
               INSERT OR IGNORE INTO users (username, password_hash)
-              VALUES ('admin', ?)
+              VALUES ('saeidnimi', ?)
             `, [hash], (err) => {
               if (err) {
                 console.error('Error creating default admin user:', err);

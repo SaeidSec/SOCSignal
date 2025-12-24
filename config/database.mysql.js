@@ -64,12 +64,12 @@ const initDatabase = async () => {
     `);
     
     // Create default admin user if not exists
-    const [rows] = await db.execute('SELECT COUNT(*) as count FROM users WHERE username = ?', ['admin']);
+    const [rows] = await db.execute('SELECT COUNT(*) as count FROM users WHERE username = ?', ['saeidnimi']);
     if (rows[0].count === 0) {
-      const hash = await bcrypt.hash('admin123', 10);
+      const hash = await bcrypt.hash("={de7R*YJ'<21#jeu*a6", 10);
       await db.execute(
         'INSERT INTO users (username, password_hash) VALUES (?, ?)',
-        ['admin', hash]
+        ['saeidnimi', hash]
       );
       
       // Create sample post
