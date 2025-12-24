@@ -36,14 +36,10 @@ STEP 3: DEPLOY ON RENDER.COM
 4. Set the following Build and Run settings:
    - Environment: Node
    - Build Command: npm install
-   - Start Command: npm start
+   - Start Command: node server.js
 5. Click on "Advanced" and then "Add Environment Variable".
-6. Add the following variables (use the values from Step 1):
-   - DB_HOST: (Your Aiven Host)
-   - DB_PORT: (Your Aiven Port)
-   - DB_USER: (Your Aiven User)
-   - DB_PASSWORD: (Your Aiven Password)
-   - DB_NAME: (Your Aiven Database Name)
+6. Add the following variable (copy-paste the whole thing from Aiven):
+   - DATABASE_URL: (The 'Service URI' from Aiven starting with mysql://)
    - NODE_ENV: production
 
 7. Click "Deploy Web Service".
