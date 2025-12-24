@@ -2,22 +2,29 @@ const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 
 // Create MySQL connection pool
-const dbConfig = {
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT) || 3306,
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'blog_db',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-  ssl: process.env.DB_HOST ? { rejectUnauthorized: false } : null
-};
+const dbConfig = process.env.DATABASE_URL 
+  ? {
+      uri: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false }
+    }
+  : {
+      host: process.env.DB_HOST || 'localhost',
+      port: parseInt(process.env.DB_PORT) || 3306,
+      user: process.env.DB_USER || 'root',
+      password: process.env.DB_PASSWORD || '',
+      database: process.env.DB_NAME || 'blog_db',
+      ssl: process.env.DB_HOST ? { rejectUnauthorized: false } : null
+    };
 
-console.log(`Connecting to database at ${dbConfig.host}:${dbConfig.port}...`);
-if (dbConfig.ssl) console.log('SSL connection enabled');
+if (process.env.DATABASE_URL) {
+  console.log('Connecting to database using connection string...');
+} else {
+  console.log(`Connecting to database at ${dbConfig.host}:${dbConfig.port}...`);
+}
 
-const pool = mysql.createPool(dbConfig);
+const pool = dbConfig.uri 
+  ? mysql.createPool(dbConfig.uri + (dbConfig.uri.includes('?') ? '&' : '?') + 'ssl={"rejectUnauthorized":false}')
+  : mysql.createPool({ ...dbConfig, waitForConnections: true, connectionLimit: 10, queueLimit: 0 });
 
 // Get a promise-based connection from the pool
 const db = pool.promise();
