@@ -1,0 +1,12 @@
+Backend Technology Stack
+-----------------------
+- Language: JavaScript (Node.js)
+- Web framework: Express
+- Environment configuration: dotenv
+- CORS handling: cors
+- Static file serving: express.static (built‑in)
+- Database abstraction: custom switch between SQLite and MySQL
+- SQLite driver: sqlite3
+- MySQL driver: mysql2
+- Password hashing: bcrypt
+- Utilities: path, express.json, express.urlencoded

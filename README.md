@@ -33,6 +33,20 @@ A clean, typography-focused personal blog with backend management capabilities. 
 - SQLite
 - JWT authentication
 - bcrypt (password hashing)
+### Backend Technology Stack
+
+The backend uses the following technologies (see `backend_tech.txt` for the full list):
+
+- Language: JavaScript (Node.js)
+- Web framework: Express
+- Environment configuration: dotenv
+- CORS handling: cors
+- Static file serving: express.static (built‑in)
+- Database abstraction: custom switch between SQLite and MySQL
+- SQLite driver: sqlite3
+- MySQL driver: mysql2
+- Password hashing: bcrypt
+- Utilities: path, express.json, express.urlencoded
 
 ## Installation
 
