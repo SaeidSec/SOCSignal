@@ -207,23 +207,41 @@ code block
 
 ## Deployment
 
-### Option 1: Deploy Together (Simple)
+### Option 1: Deploy Together (Recommended for Railway/Render)
 
-Deploy the entire application to a Node.js hosting service:
+Deploy the entire application to a Node.js hosting service. The application now supports both SQLite and MySQL databases via the DATABASE_TYPE environment variable.
 
 **Recommended Services:**
-- Heroku
-- Railway
+- Railway (recommended for SQLite)
 - Render
+- Heroku
 - DigitalOcean App Platform
 
 **Steps:**
 1. Push code to GitHub
 2. Connect repository to hosting service
-3. Set environment variables (JWT_SECRET, PORT)
+3. Set environment variables:
+   - JWT_SECRET: (generate a strong secret)
+   - DATABASE_TYPE: sqlite (for SQLite) or mysql (for MySQL)
+   - NODE_ENV: production
 4. Deploy
 
-### Option 2: Deploy Separately (Advanced)
+### Option 2: Deploy to Railway (Specific Instructions)
+
+**Steps:**
+1. Go to https://railway.app and sign up with your GitHub account
+2. Click "New Project" and select "Deploy from GitHub"
+3. Select your repository containing this code
+4. On the "Configure Build and Deploy" page:
+   - Build Command: npm install
+   - Start Command: npm start
+5. Add the following environment variables in the "Variables" tab:
+   - JWT_SECRET: (generate a strong secret)
+   - DATABASE_TYPE: sqlite
+   - NODE_ENV: production
+6. Click "Deploy"
+
+### Option 3: Deploy Separately (Advanced)
 
 **Backend Deployment:**
 1. Deploy backend to Node.js hosting (Heroku, Railway, etc.)
@@ -254,9 +272,10 @@ app.use(cors({
 Set these in your hosting service:
 
 ```
-PORT=3001
 JWT_SECRET=<generate-a-strong-random-secret>
+DATABASE_TYPE=sqlite  # Set to 'mysql' if using MySQL instead
 NODE_ENV=production
+PORT=3000  # Railway typically uses dynamic ports
 ```
 
 **Generate a secure JWT secret:**
